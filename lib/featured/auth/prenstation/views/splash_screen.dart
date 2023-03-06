@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../utils/app_routes.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -22,14 +24,17 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
    opacityHandler(){
-     Future.delayed(const Duration(milliseconds: 500), () {
+     Future.delayed(const Duration(milliseconds: 200), () {
        setState(() {
          opacityLevel = 1.0;
        });
+       nextRoute();
      });
    }
   nextRoute() {
     Future.delayed(const Duration(milliseconds: 3000), () {
+      Navigator.popAndPushNamed(context, signin);
+
     });
   }
   @override

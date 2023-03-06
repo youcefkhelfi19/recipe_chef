@@ -1,12 +1,14 @@
  import 'package:flutter/material.dart';
 import 'package:recipe_chef/featured/auth/prenstation/views/splash_screen.dart';
 
+import '../featured/auth/prenstation/views/signin_screen.dart';
+
 const String  splash ='/';
  const String  mainRoute ='/main';
  const String categories = '/cats';
  const String details = '/details';
  const String login = '/login';
- const String signup = '/signup';
+ const String signin = '/signin';
  const String update = '/update';
  const String popular = '/popular';
  const String recommended = '/recommended';
@@ -17,8 +19,8 @@ final arg = routeSettings.arguments;
 switch(routeSettings.name){
 case mainRoute:
 return MaterialPageRoute(builder: (c_)=>const SplashScreen());
-case signup:
-return MaterialPageRoute(builder: (c_)=>const SplashScreen());
+case signin:
+return MaterialPageRoute(builder: (c_)=>const SigninScreen());
 case popular:
 return MaterialPageRoute(builder: (c_)=>const SplashScreen());
 case newest:

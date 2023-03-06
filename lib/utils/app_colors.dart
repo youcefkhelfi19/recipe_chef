@@ -6,5 +6,7 @@ const Color green = Color(0xFFA8D672);
 const Color red = Color(0xFFEB7A53);
 const Color mainColor = Color(0xFFF6ECC9);
 const Color white = Color(0xFFFFFFFF);
+const Color blue = Color(0xFF4267B2);
+
 
 
