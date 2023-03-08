@@ -1,10 +1,22 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 
+import 'featured/auth/prenstation/view_models/auth_cubit.dart';
+import 'firebase_options.dart';
+import 'services/locator.dart';
 import 'utils/app_routes.dart';
 import 'utils/app_theme.dart';
 
-void main() {
-  runApp(const RecipeChef());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage().initStorage;
+  await Firebase.initializeApp(  options: DefaultFirebaseOptions.currentPlatform,
+  );
+  setup();
+
+  runApp( const RecipeChef());
 }
 
 class RecipeChef extends StatelessWidget {
@@ -12,11 +24,19 @@ class RecipeChef extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateRoute: generateRoutes,
-      initialRoute: '/',
-      theme: englishTheme,
-      debugShowCheckedModeBanner: false,
+    return MultiBlocProvider(
+
+      providers: [
+        BlocProvider(create:(context) => AuthCubit()),
+
+      ],
+      child: MaterialApp(
+
+        onGenerateRoute: generateRoutes,
+        initialRoute: '/',
+        theme: englishTheme,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

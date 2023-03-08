@@ -6,10 +6,11 @@ import 'app_texts.dart';
 ThemeData englishTheme = ThemeData(
     scaffoldBackgroundColor: mainColor,
     fontFamily: 'TiltNeon',
-    appBarTheme: const AppBarTheme(
+    appBarTheme:  const AppBarTheme(
         backgroundColor: mainColor,
         elevation: 0.0,
-        centerTitle: true
+        centerTitle: true,
+        titleTextStyle: style24
     ),
     textTheme: const TextTheme(
         bodyMedium: style24,

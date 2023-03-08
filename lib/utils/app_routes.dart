@@ -2,6 +2,7 @@
 import 'package:recipe_chef/featured/auth/prenstation/views/splash_screen.dart';
 
 import '../featured/auth/prenstation/views/signin_screen.dart';
+import '../featured/main_screen/main_screen.dart';
 
 const String  splash ='/';
  const String  mainRoute ='/main';
@@ -18,7 +19,7 @@ const String  splash ='/';
 final arg = routeSettings.arguments;
 switch(routeSettings.name){
 case mainRoute:
-return MaterialPageRoute(builder: (c_)=>const SplashScreen());
+return MaterialPageRoute(builder: (c_)=> const MainScreen());
 case signin:
 return MaterialPageRoute(builder: (c_)=>const SigninScreen());
 case popular:

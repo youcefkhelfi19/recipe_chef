@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
    opacityHandler(){
-     Future.delayed(const Duration(milliseconds: 200), () {
+     Future.delayed(const Duration(milliseconds: 0), () {
        setState(() {
          opacityLevel = 1.0;
        });
