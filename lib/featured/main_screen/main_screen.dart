@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
         colorSelected: black,
         indexSelected: visit,
         isFloating: true,
-        highlightStyle:const HighlightStyle(sizeLarge: true, background:Colors.black, elevation: 3),
+        highlightStyle:const HighlightStyle(sizeLarge: true, background:black, elevation: 3),
         onTap: (int index) => setState(() {
           visit = index;
           print(index);

@@ -1,7 +1,9 @@
  import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 const TextStyle style24 = TextStyle(
-    color: Colors.black,
+    color: black,
     fontSize: 22,
     fontWeight: FontWeight.bold,
     fontFamily: 'TiltNeon'
