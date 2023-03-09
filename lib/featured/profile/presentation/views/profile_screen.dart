@@ -1,172 +1,153 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:recipe_chef/utils/app_colors.dart';
 
 import '../../../../utils/app_texts.dart';
 import '../../../../utils/aseets_paths.dart';
+import '../view_models/admin_cubit.dart';
+import 'widgets/alert_dialog.dart';
 import 'widgets/custom_list_tile.dart';
+import 'widgets/profile_image.dart';
 import 'widgets/settings_list_tile.dart';
+import 'widgets/social_media_btn.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    bool value = true;
-
     return Scaffold(
-       body: ListView(
-         padding: const EdgeInsets.symmetric(horizontal: 8),
-         children: [
-           Align(
-             alignment: Alignment.center,
-             child: Stack(
-               children: [
-                 CircleAvatar(
-                   radius: 55,
-                   backgroundColor: black,
-                   child:value?const CircleAvatar(
-                     radius: 52,
-                     backgroundImage: AssetImage(user),
-                   ): const CircleAvatar(
-                     backgroundColor: mainColor,
-                     radius: 52,
-                     backgroundImage: NetworkImage('state.admin.image'),
-                   ),
-                 ),
-                 Positioned(
-                   bottom: 5,
-                   right: 5,
-                   child: InkWell(
-                     onTap: (){
-                       //imageAlertDialog(context:context,
-                         //  openCamera: (){_pickImageFromCamera();},
-                          // openGallery: (){_pickImageFromGallery();}
-                       //);
-                     },
-                     child: Container(
-                         padding: const EdgeInsets.all(4),
-                         decoration: const BoxDecoration(
-                             shape: BoxShape.circle,
-                             color: black
-                         ),
-                         child:const Icon(Ionicons.camera_outline,color: mainColor,size: 15,)),
-                   ),
-
-                 )
-               ],
-             ),
-           ),
-           const Align(
-               alignment: Alignment.center,
-               child: Text('username',style: style24,)),
-           const SizedBox(height: 20,),
-           const Text('Social Media'),
-           const SizedBox(height: 10,),
-           Row(
-             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-             children: const [
-
+       body: BlocBuilder<AdminCubit, AdminState>(
+  builder: (context, state) {
+    if(state is AdminSuccess){
+      return ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        children: [
+          ProfileImage(imageUrl: state.admin.imageLink,),
+          Align(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:  [
+                  const Icon(Icons.edit_outlined,color: Colors.transparent,),
+                  const SizedBox(width: 5,),
+                   Text(state.admin.username,style: style24,),
+                  const SizedBox(width: 5,),
+                  InkWell(
+                      onTap: (){
+                        showDialog(context: context, builder: (context){
+                          return  const CustomAlertDialog(
+                            fieldName: 'username',
+                            hintText: 'Username',
+                          );
+                        });
+                      },
+                      child: const Icon(Icons.edit_outlined))
+                ],
+              )),
+          const SizedBox(height: 20,),
+          const Text('Social Media'),
+          const SizedBox(height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children:  const [
               SocialMediaBtn(
                 image: youtube,
+                fieldName: 'youtubeLink',
+                hintText: 'Youtube chanel Link',
 
               ),
               SocialMediaBtn(
                 image: instagram,
+                fieldName:  'instagramLink',
+                hintText: 'Instagram Page',
+
 
               ),
               SocialMediaBtn(
                 image: facebook,
+                fieldName: 'facebookLink',
+                hintText: 'Facebook Page Link',
+
 
               ),
-               SocialMediaBtn(
+              SocialMediaBtn(
                 image: tiktok,
-
+                fieldName: 'tiktokLink',
+                hintText: 'TikTok Account Link',
               ),
-             ],
-           ),
-           const SizedBox(height: 10,),
+            ],
+          ),
+          const SizedBox(height: 10,),
 
-           const Text('User Info',style: style24,),
+          const Text('User Info',style: style24,),
 
-           Card(
-             shape: RoundedRectangleBorder(
-                 borderRadius: BorderRadius.circular(10)
-             ),
-             color: const Color(0xFFFAF7F0),
-             child:Column(
-               children:  [
-                  CustomListTile(
-                   title: 'Email',
-                   subtitle: Text('state.admin.email',style: style20.copyWith(color: Colors.grey),),
-                   leading: Ionicons.mail_outline,
-                 ) ,
-                 CustomListTile(
-                   title: 'Phone',
-                   subtitle:  Text('state.admin.phone',style: style20.copyWith(color: Colors.grey),),
-                   leading: Ionicons.call_outline,
-                   trailing: Icons.edit_outlined,
-                   onTap: (){
-                  //   updateFieldAlert(context: context, title: 'Update Phone number', hint: 'phone number',  fieldName: 'phone');
-                   },
-                 ),
+          Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)
+            ),
+            color: const Color(0xFFFAF7F0),
+            child:Column(
+              children:  [
+                CustomListTile(
+                  title: 'Email',
+                  subtitle: Text(state.admin.email,style: style20.copyWith(color: Colors.grey),),
+                  leading: Ionicons.mail_outline,
+                ) ,
+                CustomListTile(
+                  title: 'Phone',
+                  subtitle:  Text(state.admin.phoneNumber,style: style20.copyWith(color: Colors.grey),),
+                  leading: Ionicons.call_outline,
+                  trailing: Icons.edit_outlined,
+                  onTap: (){
+                    showDialog(context: context, builder: (context){
+                      return  const CustomAlertDialog(
+                        fieldName: 'phoneNumber',
+                        hintText: 'Phone number',
+                        isNumber: false,
+                      );
+                    });
+                  },
+                ),
 
-               ],
-             ),
-           ),
-           const SizedBox(height: 10,),
-           const Text('Settings',style: style24,),
-           Card(
-             shape: RoundedRectangleBorder(
-                 borderRadius: BorderRadius.circular(10)
-             ),
-             child: Column(
-               children:  [
-                 const SettingListTile(
-                   title: 'Change Language',
-                   trailing:Padding(
-                     padding: EdgeInsets.symmetric(horizontal: 15),
-                     child: Text('EN'),
-                   ),
-                 ),
-                 SettingListTile(
-                   title: 'logout',
-                   trailing:IconButton(onPressed: (){
+              ],
+            ),
+          ),
+          const SizedBox(height: 10,),
+          const Text('Settings',style: style24,),
+          Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: Column(
+              children:  [
+                const SettingListTile(
+                  title: 'Change Language',
+                  trailing:Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text('EN'),
+                  ),
+                ),
+                SettingListTile(
+                  title: 'logout',
+                  trailing:IconButton(onPressed: (){
 
-                   }, icon: const Icon(Ionicons.log_out_outline),
-                   ),
-                 )
-               ],
-             ),
-           )
-         ],
-       ),
+                  }, icon: const Icon(Ionicons.log_out_outline),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      );
+
+    }if(state is AdminFailed){
+      return const Center(child: Text('cant load data'),);
+    }
+    return const Center(child: CircularProgressIndicator());
+  },
+),
     );
   }
 }
 
-class SocialMediaBtn extends StatelessWidget {
-  const SocialMediaBtn({
-    super.key,
-    required this.image,
-  });
-  final String image;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: (){
 
-      },
-      child: Container(
-        height: 50,
-        width: 50,
-        padding: const EdgeInsets.all(8),
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: black
-        ),
-        child: Image.asset(image),
-      ),
-    );
-  }
-}

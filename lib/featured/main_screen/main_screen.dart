@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:recipe_chef/utils/app_colors.dart';
 
+import '../../services/locator.dart';
+import '../profile/presentation/view_models/admin_cubit.dart';
 import 'widgets/nav_bar_widget.dart';
 
 
@@ -15,7 +19,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int visit = 0;
-
+ @override
+  void initState() {
+   context.read<AdminCubit>().fetchAdminData(id: getIt.get<GetStorage>().read('id'));
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
