@@ -6,6 +6,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:recipe_chef/utils/app_colors.dart';
 
 import '../../services/locator.dart';
+import '../categories/presentation/views/widgets/add_category_btn.dart';
 import '../profile/presentation/view_models/admin_cubit.dart';
 import 'widgets/nav_bar_widget.dart';
 
@@ -29,6 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Recipe'),
+        actions: visit == 1?[const AddCategoryBtn()]:[],
       ),
       body: screens[visit],
 

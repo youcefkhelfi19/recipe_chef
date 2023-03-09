@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'featured/auth/prenstation/view_models/auth_cubit.dart';
+import 'featured/categories/presentation/view_models/add_category/add_category_cubit.dart';
 import 'featured/profile/presentation/view_models/admin_cubit.dart';
 import 'firebase_options.dart';
 import 'services/locator.dart';
@@ -30,6 +31,7 @@ class RecipeChef extends StatelessWidget {
       providers: [
         BlocProvider(create:(context) => AuthCubit()),
         BlocProvider(create:(context) => AdminCubit()),
+        BlocProvider(create:(context) => AddCategoryCubit()),
 
       ],
       child: MaterialApp(
