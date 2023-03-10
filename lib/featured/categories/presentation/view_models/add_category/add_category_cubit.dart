@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:recipe_chef/utils/app_colors.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../services/global_functions/show_toast.dart';
+import '../../../../../services/locator.dart';
 import '../../../data/models/category_model.dart';
 
 part 'add_category_state.dart';
@@ -17,8 +19,9 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-  List<CategoryModel> categories  = [];
   var uuid = const Uuid();
+  List<CategoryModel> categories = [];
+
   Future addCategory(CategoryModel category) async {
     emit( const AddCategoryLoading());
     try {
@@ -60,6 +63,17 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
   }
   getAllCategories() {
     var snapshot = firebaseFirestore.collection('categories').snapshots();
+    snapshot.forEach((element) {
+      if(categories.length != element.docs.length){
+        categories = [];
+        for(var e in element.docs ){
+          //print(e.data());
+          categories.add(CategoryModel.fromJson(e.data()));
+        }
+        getIt.get<GetStorage>().write('categories',categories);
+      }else{
+      }
+    });
     return snapshot;
   }
 }

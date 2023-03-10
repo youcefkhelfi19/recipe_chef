@@ -6,6 +6,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:recipe_chef/utils/app_colors.dart';
 
 import '../../services/locator.dart';
+import '../categories/presentation/view_models/add_category/add_category_cubit.dart';
 import '../categories/presentation/views/widgets/add_category_btn.dart';
 import '../profile/presentation/view_models/admin_cubit.dart';
 import 'widgets/nav_bar_widget.dart';
@@ -22,12 +23,15 @@ class _MainScreenState extends State<MainScreen> {
   int visit = 0;
  @override
   void initState() {
-   context.read<AdminCubit>().fetchAdminData(id: getIt.get<GetStorage>().read('id'));
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MultiBlocProvider(
+  providers: [
+    BlocProvider(create:(context) => AddCategoryCubit()..getAllCategories()),
+  ],
+  child: Scaffold(
       appBar: AppBar(
         title: const Text('Recipe'),
         actions: visit == 1?[const AddCategoryBtn()]:[],
@@ -48,6 +52,7 @@ class _MainScreenState extends State<MainScreen> {
         }),
       ),
 
-    );
+    ),
+);
   }
 }

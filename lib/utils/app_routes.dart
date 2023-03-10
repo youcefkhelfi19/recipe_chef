@@ -1,8 +1,11 @@
  import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:recipe_chef/featured/auth/prenstation/views/splash_screen.dart';
 
 import '../featured/auth/prenstation/views/signin_screen.dart';
+import '../featured/categories/presentation/views/category_feeds.dart';
 import '../featured/main_screen/main_screen.dart';
+import '../services/locator.dart';
 
 const String  splash ='/';
  const String  mainRoute ='/main';
@@ -14,6 +17,7 @@ const String  splash ='/';
  const String popular = '/popular';
  const String recommended = '/recommended';
  const String newest = '/newest';
+ const String categoryFeeds = '/feeds';
  const String cart = '/cart';
  Route<dynamic> generateRoutes (RouteSettings routeSettings){
 final arg = routeSettings.arguments;
@@ -30,6 +34,11 @@ case recommended:
 return MaterialPageRoute(builder: (c_)=>const SplashScreen());
 case splash:
 return MaterialPageRoute(builder: (_)=> const SplashScreen());
+ case categoryFeeds:
+  if(arg is int){
+   return MaterialPageRoute(builder: (_)=>  CategoryFeeds(index:arg, categories:getIt.get<GetStorage>().read('categories') ,));
+  }
+  return _errorRoute();
 case cart:
 return MaterialPageRoute(builder: (_)=> const SplashScreen());
 case update:

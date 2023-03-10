@@ -30,9 +30,6 @@ class RecipeChef extends StatelessWidget {
 
       providers: [
         BlocProvider(create:(context) => AuthCubit()),
-        BlocProvider(create:(context) => AdminCubit()),
-        BlocProvider(create:(context) => AddCategoryCubit()),
-
       ],
       child: MaterialApp(
 

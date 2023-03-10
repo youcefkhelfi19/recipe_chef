@@ -5,22 +5,12 @@ import 'package:recipe_chef/featured/categories/data/models/category_model.dart'
 import 'package:recipe_chef/utils/app_colors.dart';
 import 'package:recipe_chef/utils/app_texts.dart';
 
+import '../../../../utils/app_routes.dart';
 import '../view_models/add_category/add_category_cubit.dart';
-
-class CategoriesScreen extends StatefulWidget {
+List<String> cats = [];
+class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
-
-  @override
-  State<CategoriesScreen> createState() => _CategoriesScreenState();
-}
-
-class _CategoriesScreenState extends State<CategoriesScreen> {
-  @override
-  void initState() {
-    context.read<AddCategoryCubit>().getAllCategories();
-
-
-  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,15 +33,19 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                        itemBuilder: (context,index){
                          Map<String, dynamic>? data = snapshot.data!.docs[index].data() as Map<String, dynamic>? ;
                          CategoryModel category = CategoryModel.fromJson(data!);
-
-                         return  CategoryCard(category: category,);
+                         return  InkWell(
+                             onTap: (){
+                               Navigator.pushNamed(
+                                   context, categoryFeeds, arguments: index);
+                             },
+                             child: CategoryCard(category: category,));
                        });
-
 
                  } else {
                    return const Center(child: Text('No data'),);
                  }
                }
+
                return const Center(
                    child:  Text(
                      'something_went_wrong',

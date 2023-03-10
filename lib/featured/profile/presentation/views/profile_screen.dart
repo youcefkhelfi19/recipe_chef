@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../../../../services/locator.dart';
 import '../../../../utils/app_texts.dart';
 import '../../../../utils/aseets_paths.dart';
 import '../view_models/admin_cubit.dart';
@@ -15,7 +17,10 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocProvider<AdminCubit>(
+  create: (context) => AdminCubit()..fetchAdminData(id: getIt.get<GetStorage>().read('id')),
+
+  child: Scaffold(
        body: BlocBuilder<AdminCubit, AdminState>(
   builder: (context, state) {
     if(state is AdminSuccess){
@@ -146,7 +151,8 @@ class ProfileScreen extends StatelessWidget {
     return const Center(child: CircularProgressIndicator());
   },
 ),
-    );
+    ),
+);
   }
 }
 
