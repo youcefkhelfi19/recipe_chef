@@ -4,25 +4,27 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as Path;
 
 import '../../../../../services/global_functions/show_toast.dart';
+import '../../../../../services/locator.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../data/models/recipe.dart';
 
 part 'recipe_state.dart';
 
 class RecipeCubit extends Cubit<RecipeState> {
-  RecipeCubit() : super(RecipeInitial());
+  RecipeCubit() : super(const RecipeInitial());
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   var uuid = const Uuid();
 
   Future uploadImagesAndRecipeData(List<File> images,Recipe recipe) async {
     String recipeId = uuid.v4();
-    emit(RecipeLoading());
+    emit(const RecipeLoading());
     List<String> imagesLinks = [];
     try {
       for (int i = 0; i < images.length; i++) {
@@ -54,12 +56,12 @@ class RecipeCubit extends Cubit<RecipeState> {
           .doc(recipe.id)
           .set(recipe.toJson())
           .whenComplete(() async {
-        emit(RecipeSuccess());
+        emit(const RecipeSuccess());
         customToast(msg: 'Product has been saved', color: black);
       });
 
     } catch (e) {
-      emit(RecipeFailed());
+      emit(const RecipeFailed());
     }
   }
   Future updateField({required dynamic fieldValue, required String field, required String id }) async {
@@ -83,7 +85,7 @@ class RecipeCubit extends Cubit<RecipeState> {
 
   }
   updateImages({required List<String> imagesLinks,required List<File> images, required String id})async{
-    emit(RecipeLoading());
+    emit(const RecipeLoading());
     try {
       for (int i = 0; i < images.length; i++) {
         final ref =  firebaseStorage
@@ -99,7 +101,7 @@ class RecipeCubit extends Cubit<RecipeState> {
         });
       }
       await updateField(fieldValue: imagesLinks, field: 'images', id: id);
-      emit(RecipeSuccess());
+      emit(const RecipeSuccess());
     } catch (e) {
       customToast(msg: 'something went wrong ', color: red);
 
@@ -117,20 +119,31 @@ class RecipeCubit extends Cubit<RecipeState> {
       return false;
     }
   }
-  Future deleteProductPictures({required Recipe recipe}) async {
+  likeUnlikePost(Recipe recipe)async{
+    String userId = getIt.get<GetStorage>().read('id');
+    if(recipe.likes.contains(userId)){
+      recipe.likes.remove(userId);
+     await updateField(fieldValue: recipe.likes, field: 'likes', id: recipe.id.toString());
+    }else{
+      recipe.likes.add(userId);
+      await updateField(fieldValue: recipe.likes, field: 'likes', id: recipe.id.toString());
+
+    }
+  }
+  Future deleteRecipePictures({required Recipe recipe}) async {
     try {
       for (var url in recipe.images!) {
         Reference photoRef = firebaseStorage.refFromURL(url);
         await photoRef.delete().then((value) {
         });
       }
-      await deleteProduct(id: recipe.id.toString(),);
+      await deleteRecipe(id: recipe.id.toString(),);
     } catch (e) {
 
     }
   }
 
-  deleteProduct({required String id}) async {
+  deleteRecipe({required String id}) async {
     try {
       await firebaseFirestore.collection('devices').doc(id).delete().whenComplete((){
       }

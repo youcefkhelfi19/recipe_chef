@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'featured/auth/prenstation/view_models/auth_cubit.dart';
 import 'featured/categories/presentation/view_models/add_category/add_category_cubit.dart';
+import 'featured/kitchen/presentation/view_models/all_recipes_cubit.dart';
 import 'featured/profile/presentation/view_models/admin_cubit.dart';
 import 'featured/recipe/presentation/view_models/add_recipe/recipe_cubit.dart';
 import 'firebase_options.dart';
@@ -34,6 +35,7 @@ class RecipeChef extends StatelessWidget {
         BlocProvider<AddCategoryCubit>(create:(context) => AddCategoryCubit()),
         BlocProvider(create:(context) => AdminCubit()),
         BlocProvider(create:(context) => RecipeCubit()),
+        BlocProvider(create:(context) => AllRecipesCubit()..getRecipes()),
       ],
       child: MaterialApp(
 

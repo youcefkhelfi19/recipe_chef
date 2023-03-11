@@ -1,8 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:recipe_chef/featured/recipe/presentation/views/add_recipe_screen.dart';
 import 'package:recipe_chef/utils/app_texts.dart';
+import 'package:card_swiper/card_swiper.dart';
 
+import '../../../../services/locator.dart';
 import '../../../../utils/app_colors.dart';
+import '../../../recipe/data/models/recipe.dart';
+import '../../../recipe/presentation/view_models/add_recipe/recipe_cubit.dart';
+import '../../../recipe/presentation/views/wigets/post_card.dart';
+import '../view_models/all_recipes_cubit.dart';
 
 class KitchenScreen extends StatelessWidget {
   const KitchenScreen({Key? key}) : super(key: key);
@@ -10,56 +21,35 @@ class KitchenScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       body: SizedBox(
-         height: 800,
-         child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-             itemCount: 10,
-             itemBuilder: (context,index){
-            return Container(
-            margin: const EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                color: white,
-                borderRadius: BorderRadius.circular(10)
-
-              ),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text('Recipe title',style: style20,),
-                  ),
-                  Image.network('https://images.unsplash.com/photo-1484723091739-30a097e8f929?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=449&q=80',height: 300,width: double.infinity,fit: BoxFit.fill,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children:  [
-                        Container(
-                          child: Column(
-                            children: [
-                               const Icon(Icons.add,color: Colors.transparent,size: 10,),
-                              Text('12.2.2023|12:23',style: style20.copyWith(fontSize: 12,color: green),),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        const Icon(Ionicons.bookmark_outline,color: red,),
-                        const SizedBox(width: 10,),
-                        Column(
-                          children: [
-                            const Icon(Ionicons.heart_outline,color: red,),
-                            Text('200',style: style20.copyWith(fontSize: 10,color: red),)
-                          ],
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
-         }),
-       ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: context.read<AllRecipesCubit>().getRecipes(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.connectionState ==
+              ConnectionState.active) {
+            if (snapshot.data!.docs.isNotEmpty) {
+              return ListView.builder(
+                  padding: const EdgeInsets.only(top: 10,left: 10,right: 10),
+                  itemCount:snapshot.data!.docs.length,
+                  itemBuilder: (context,index){
+                    Map<String, dynamic>? data = snapshot.data!.docs[index].data() as Map<String, dynamic>? ;
+                    Recipe recipe = Recipe.fromJson(data!);
+                    return  RecipePost(recipe: recipe,);
+                  });
+            } else {
+              return const Center(child: Text('No data'),);
+            }
+          }
+          return const Center(
+              child:  Text(
+                'something_went_wrong',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 30),
+              ));
+        },
+      ),
     );
   }
 }
+
