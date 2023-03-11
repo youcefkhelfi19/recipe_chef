@@ -21,6 +21,7 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   var uuid = const Uuid();
   List<CategoryModel> categories = [];
+  List<String> categoriesNames = [];
 
   Future addCategory(CategoryModel category) async {
     emit( const AddCategoryLoading());
@@ -64,15 +65,15 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
   getAllCategories() {
     var snapshot = firebaseFirestore.collection('categories').snapshots();
     snapshot.forEach((element) {
-      if(categories.length != element.docs.length){
-        categories = [];
-        for(var e in element.docs ){
-          //print(e.data());
+      for(var e in element.docs ){
+        CategoryModel category = CategoryModel.fromJson(e.data());
+        if(!categories.contains(category)){
           categories.add(CategoryModel.fromJson(e.data()));
+          categoriesNames.add(e.data()['title']);
         }
-        getIt.get<GetStorage>().write('categories',categories);
-      }else{
       }
+      getIt.get<GetStorage>().write('categories',categories);
+      getIt.get<GetStorage>().write('names',categoriesNames);
     });
     return snapshot;
   }

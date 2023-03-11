@@ -23,36 +23,33 @@ class _MainScreenState extends State<MainScreen> {
   int visit = 0;
  @override
   void initState() {
+   context.read<AdminCubit>().fetchAdminData(id: getIt.get<GetStorage>().read('id'));
+   context.read<AddCategoryCubit>().getAllCategories();
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-  providers: [
-    BlocProvider(create:(context) => AddCategoryCubit()..getAllCategories()),
-  ],
-  child: Scaffold(
-      appBar: AppBar(
-        title: const Text('Recipe'),
-        actions: visit == 1?[const AddCategoryBtn()]:[],
-      ),
-      body: screens[visit],
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Recipe'),
+          actions: visit == 1?[const AddCategoryBtn()]:[],
+        ),
+        body: screens[visit],
 
-      bottomNavigationBar: BottomBarCreative(
-        items: items,
-        backgroundColor: mainColor,
-        color: green,
-        colorSelected: black,
-        indexSelected: visit,
-        isFloating: true,
-        highlightStyle:const HighlightStyle(sizeLarge: true, background:black, elevation: 3),
-        onTap: (int index) => setState(() {
-          visit = index;
-          print(index);
-        }),
-      ),
+        bottomNavigationBar: BottomBarCreative(
+          items: items,
+          backgroundColor: mainColor,
+          color: green,
+          colorSelected: black,
+          indexSelected: visit,
+          isFloating: true,
+          highlightStyle:const HighlightStyle(sizeLarge: true, background:black, elevation: 3),
+          onTap: (int index) => setState(() {
+            visit = index;
+            print(index);
+          }),
+        ),
 
-    ),
-);
+      );
   }
 }

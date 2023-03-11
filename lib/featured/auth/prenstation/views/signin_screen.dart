@@ -5,6 +5,7 @@ import 'package:recipe_chef/utils/app_routes.dart';
 import 'package:recipe_chef/utils/app_texts.dart';
 
 import '../../../../services/global_functions/show_toast.dart';
+import '../../../../utils/global_widgits/loading_widget.dart';
 import '../view_models/auth_cubit.dart';
 
 
@@ -95,29 +96,11 @@ class SigninScreen extends StatelessWidget {
                 ],
               ),
             ),
-            state.isLoading? Container(
-              height: double.infinity,
-              width: double.infinity,
-              color: Colors.black12,
-              alignment: Alignment.center,
-              child: Container(
-                height: 70,
-                width: 70,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                 color: black,
-                  borderRadius: BorderRadius.circular(10)
-
-                ),
-                child: const CircularProgressIndicator(
-                  backgroundColor: mainColor,
-                  color: green,
-                )
-              ),
-            ):const SizedBox(),
+            state.isLoading? LoadingWidget():const SizedBox(),
           ],
         );
       },
     );
   }
 }
+
