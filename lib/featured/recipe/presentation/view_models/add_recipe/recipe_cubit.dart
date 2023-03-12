@@ -142,6 +142,43 @@ class RecipeCubit extends Cubit<RecipeState> {
 
     }
   }
+  updateDetails({required String id ,required String title,required String category,required String description,required String youtubeLink })async{
+    emit(const RecipeLoading());
+    try{
+
+      await  firebaseFirestore
+          .collection('products')
+          .doc(id)
+          .update({'title': title,'description': description,'category': category,
+        'youtubeLink': youtubeLink,}).then((value){
+
+        customToast(
+            msg: 'data has been updated', color: black
+        );
+
+        emit(const RecipeSuccess());
+      });
+
+
+    }catch(e){
+      emit(const RecipeFailed());
+      customToast(
+          msg: 'Something went wrong ', color: red
+      );
+    }
+  }
+
+  getRecipesByCategory(String category) {
+    return firebaseFirestore
+        .collection('recipes')
+        .where('category', isEqualTo: category)
+        .snapshots();
+  }
+  getRecipes() {
+    return firebaseFirestore
+        .collection('recipes')
+        .snapshots();
+  }
 
   deleteRecipe({required String id}) async {
     try {

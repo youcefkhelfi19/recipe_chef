@@ -4,7 +4,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:recipe_chef/featured/profile/presentation/views/profile_screen.dart';
 
 import '../../categories/presentation/views/categories_screen.dart';
-import '../../kitchen/presentation/views/kitchen_screen.dart';
+import '../../recipe/presentation/views/kitchen_screen.dart';
 import '../../recipe/presentation/views/add_recipe_screen.dart';
 import '../../saved/presentation/views/saved_screen.dart';
 

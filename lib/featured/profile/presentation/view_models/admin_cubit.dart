@@ -70,7 +70,6 @@ class AdminCubit extends Cubit<AdminState> {
 
       });
     }catch(e){
-
       customToast(
           msg: 'Something went wrong ', color:red
       );

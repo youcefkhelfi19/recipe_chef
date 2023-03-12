@@ -5,6 +5,7 @@ import 'package:recipe_chef/featured/auth/prenstation/views/splash_screen.dart';
 import '../featured/auth/prenstation/views/signin_screen.dart';
 import '../featured/categories/presentation/views/category_feeds.dart';
 import '../featured/main_screen/main_screen.dart';
+import '../featured/recipe/presentation/views/recipe_details.dart';
 import '../services/locator.dart';
 
 const String  splash ='/';
@@ -45,7 +46,7 @@ case update:
 return _errorRoute();
 case details:
 if(arg is String){
-return MaterialPageRoute(builder: (_)=>  SplashScreen());
+return MaterialPageRoute(builder: (_)=>  RecipeDetails(recipeId: arg,));
 }
 return _errorRoute();
 case categories:
