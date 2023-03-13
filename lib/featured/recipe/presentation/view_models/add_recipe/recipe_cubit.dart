@@ -179,6 +179,13 @@ class RecipeCubit extends Cubit<RecipeState> {
         .collection('recipes')
         .snapshots();
   }
+  getSavedRecipes() {
+    List<String> saved = getIt.get<GetStorage>().read('saved');
+
+    return firebaseFirestore
+        .collection('recipes').where('id', whereIn: saved.isEmpty?['']:saved  )
+        .snapshots();
+  }
 
   deleteRecipe({required String id}) async {
     try {

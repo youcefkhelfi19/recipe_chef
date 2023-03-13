@@ -8,8 +8,10 @@ class Admin {
   final String instagramLink;
   final String youtubeLink;
   final String facebookLink;
+  final List<String> saved;
 
-  Admin({
+  Admin( {
+    required this.saved,
     required this.id,
     required this.username,
     required this.email,
@@ -32,6 +34,7 @@ class Admin {
       'instagramLink': instagramLink,
       'youtubeLink': youtubeLink,
       'facebookLink': facebookLink,
+      'saved':saved,
     };
   }
 
@@ -46,6 +49,7 @@ class Admin {
       instagramLink: json['instagramLink'],
       youtubeLink: json['youtubeLink'],
       facebookLink: json['facebookLink'],
+      saved: List<String>.from(json['saved'])
     );
   }
 }

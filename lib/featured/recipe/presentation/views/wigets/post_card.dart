@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:recipe_chef/featured/profile/presentation/view_models/admin_cubit.dart';
 import 'package:recipe_chef/utils/app_routes.dart';
 
 import '../../../../../services/locator.dart';
@@ -57,7 +58,6 @@ class RecipePost extends StatelessWidget {
                             width: 100,
                             child: Image.asset(
                               'assets/images/loading.gif',
-
                             )
                         );
                       },
@@ -84,7 +84,7 @@ class RecipePost extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  const Icon(Ionicons.bookmark_outline,color: red,),
+                  SaveBtn(id: recipe.id.toString(),),
                   const SizedBox(width: 10,),
                   Column(
                     children: [
@@ -103,5 +103,24 @@ class RecipePost extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+class SaveBtn extends StatefulWidget {
+  const SaveBtn({Key? key, required this.id}) : super(key: key);
+   final String id ;
+  @override
+  State<SaveBtn> createState() => _SaveBtnState();
+}
+
+class _SaveBtnState extends State<SaveBtn> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onTap: (){
+          context.read<AdminCubit>().saveRecipe(postId: widget.id);
+          setState(() {
+          });
+        },
+        child:  Icon(context.read<AdminCubit>().admin.saved.contains(widget.id)?Ionicons.bookmark:Ionicons.bookmark_outline,color: red,));
   }
 }

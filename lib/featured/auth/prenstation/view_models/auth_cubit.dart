@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
@@ -35,7 +34,8 @@ class AuthCubit extends Cubit<AuthState> {
             tiktokLink: '',
             instagramLink: '',
             youtubeLink: '',
-            imageLink: value.user!.photoURL.toString()
+            imageLink: value.user!.photoURL.toString(),
+            saved: []
         );
         getIt.get<GetStorage>().read('id')==null? uploadAdminData(admin):null;
       });
@@ -79,6 +79,7 @@ class AuthCubit extends Cubit<AuthState> {
             instagramLink: '',
             youtubeLink: '',
             imageLink: value.user!.photoURL.toString(),
+            saved: []
         );
         getIt.get<GetStorage>().read('id')==null? uploadAdminData(admin):null;
       });
@@ -105,6 +106,7 @@ class AuthCubit extends Cubit<AuthState> {
         getIt.get<GetStorage>().remove('token');
       });
     }catch(e){
+      print(e);
     }
   }
   checkSession(){

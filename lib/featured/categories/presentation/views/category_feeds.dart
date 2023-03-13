@@ -1,7 +1,12 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import '../../../../utils/app_colors.dart';
+import '../../../recipe/data/models/recipe.dart';
+import '../../../recipe/presentation/view_models/add_recipe/recipe_cubit.dart';
+import '../../../recipe/presentation/views/wigets/post_card.dart';
 import '../../data/models/category_model.dart';
 
 class CategoryFeeds extends StatefulWidget {
@@ -36,7 +41,7 @@ class _CategoryFeedsState extends State<CategoryFeeds> with TickerProviderStateM
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.all(0),
               alignment: Alignment.topCenter,
               child: ButtonsTabBar(
                 controller: tabController,
@@ -61,11 +66,38 @@ class _CategoryFeedsState extends State<CategoryFeeds> with TickerProviderStateM
             ),
           ),
           Expanded(
-              flex: 7,
+              flex:15,
               child: TabBarView(
                 controller: tabController,
                 children: widget.categories.map((CategoryModel category) {
-                  return SizedBox();
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: context.read<RecipeCubit>().getRecipesByCategory(category.title),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.active) {
+                        if (snapshot.data!.docs.isNotEmpty) {
+                          return ListView.builder(
+                              padding: const EdgeInsets.only(top: 10,left: 10,right: 10),
+                              itemCount:snapshot.data!.docs.length,
+                              itemBuilder: (context,index){
+                                Map<String, dynamic>? data = snapshot.data!.docs[index].data() as Map<String, dynamic>? ;
+                                Recipe recipe = Recipe.fromJson(data!);
+                                return  RecipePost(recipe: recipe,);
+                              });
+                        } else {
+                          return const Center(child: Text('No data'),);
+                        }
+                      }
+                      return const Center(
+                          child:  Text(
+                            'something_went_wrong',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 30),
+                          ));
+                    },
+                  );
                 }).toList(),))
         ],
       ),

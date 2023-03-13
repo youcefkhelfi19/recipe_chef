@@ -17,13 +17,13 @@ class AdminCubit extends Cubit<AdminState> {
   AdminCubit() : super(AdminInitial());
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  late Admin admin;
   @override
   void onChange(Change<AdminState> change) {
     super.onChange(change);
   }
   Future fetchAdminData({required String id , bool showLoading = false})async{
     showLoading?emit(AdminLoading()):null;
-    Admin admin;
     try{
       var snapshot =  firebaseFirestore.collection('admins').doc(id);
       snapshot.get().then((value){
@@ -32,12 +32,13 @@ class AdminCubit extends Cubit<AdminState> {
         emit(AdminSuccess(
             admin: admin
         ));
+        getIt.get<GetStorage>().write('saved', admin.saved);
       });
     }catch(e){
       emit(AdminFailed(errMsg: e.toString()));
     }
   }
-  Future updateField({required String fieldValue, required String field}) async {
+  Future updateField({required dynamic fieldValue, required String field}) async {
 
     try{
       await  firebaseFirestore
@@ -52,6 +53,18 @@ class AdminCubit extends Cubit<AdminState> {
           msg: 'Something went wrong ', color: red
       );
     }
+  }
+  saveRecipe({required String postId}){
+     List<String> saved = getIt.get<GetStorage>().read('saved');
+     if(saved.contains(postId)){
+       saved.remove(postId);
+       updateField(fieldValue: saved, field: 'saved');
+     }else{
+       saved.add(postId);
+
+       updateField(fieldValue: saved, field: 'saved');
+
+     }
 
   }
   uploadImage(File image)async{

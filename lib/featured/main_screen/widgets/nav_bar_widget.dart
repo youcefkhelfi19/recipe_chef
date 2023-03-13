@@ -6,7 +6,7 @@ import 'package:recipe_chef/featured/profile/presentation/views/profile_screen.d
 import '../../categories/presentation/views/categories_screen.dart';
 import '../../recipe/presentation/views/kitchen_screen.dart';
 import '../../recipe/presentation/views/add_recipe_screen.dart';
-import '../../saved/presentation/views/saved_screen.dart';
+import '../../recipe/presentation/views/saved_screen.dart';
 
 const List<TabItem> items = [
   TabItem(

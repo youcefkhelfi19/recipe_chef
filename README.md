@@ -29,6 +29,8 @@ samples, guidance on mobile development, and a full API reference.
 <img src="sh/9.jpg"  width="400" height="800">
 <img src="sh/10.jpg"  width="400" height="800">
 <img src="sh/11.jpg"  width="400" height="800">
+<img src="sh/12.jpg"  width="400" height="800">
+<img src="sh/13.jpg"  width="400" height="800">
 
 
 

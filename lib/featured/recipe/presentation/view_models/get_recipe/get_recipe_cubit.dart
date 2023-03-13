@@ -11,7 +11,6 @@ class GetRecipeCubit extends Cubit<GetRecipeState> {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   Future getRecipe({required String id})async{
     emit( GetRecipeLoading());
-
     Recipe recipe;
     try{
       var snapshot =   firebaseFirestore.collection('recipes').doc(id);
